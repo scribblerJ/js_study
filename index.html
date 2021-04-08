@@ -12,26 +12,54 @@
         <div>이름 : <input type="text" id="name"></div>
         <div>지역 : 
             <select id="city" onchange="changeCity();">
-            <option value="02">서울</option>
-            <option value="064">제주</option>
             </select>
         </div>
-        <div>
-            <select id="region_02">
-                <option value="">강남</option>
-                <option value="">서초</option>
-            </select>
-            <select id="region_064" style="display: none;">
-                <option value="">제주시</option>
-                <option value="">서귀포시</option>
-            </select>
+        <div id='town'>동네 : 
         </div>
         <button type="button" onclick="regist();">등록</button>
+        <div>테스트 : <input type="text" id="test"></div>
     </div>
     <script>
         function regist(){
-            alert(document.getElementById("name").value);
-            alert(document.getElementById("city").value);
+            let obj = {
+                name : "",
+                city : ""
+            };
+            obj.name = document.getElementById("name").value;
+            obj.city = document.getElementById("city").value;
+
+            printConsole(obj);
+        }
+        function loadCity(){
+            let city = [
+                {code: "02",name: "서울", town: ["강남", "서초"]},
+                {code: "064",name: "제주", town: ["제주시", "서귀포시"]}
+            ];
+            for (i =0; i<city.length; i++){
+                var tag = document.createElement('option');
+                tag.value = city[i].code;
+                var msg = document.createTextNode(city[i].name);
+                tag.appendChild(msg);
+                document.getElementById('city').appendChild(tag);
+                
+                tag = document.createElement('select');
+                tag.id = 'region_'+city[i].code;
+                if(i!=0){
+                    tag.style = "display: none;";
+                }
+                document.getElementById('town').appendChild(tag);
+                for(j=0; j<city[i].town.length; j++){
+                    var option_tag = document.createElement('option');
+                    option_tag.value ='';
+                    var option_msg = document.createTextNode(city[i].town[j]);
+                    option_tag.appendChild(option_msg);
+                    document.getElementById('region_'+city[i].code).appendChild(option_tag);
+                }
+            }
+        }
+        loadCity();
+        function printConsole(data){
+            console.log(data)
         }
         function changeCity(){
             let city = document.getElementById("city").value;
@@ -39,7 +67,7 @@
             document.getElementById("region_064").style.display = "none";
             document.getElementById("region_"+city).style.display = "";
         }
-    </script>
+        </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </body>
